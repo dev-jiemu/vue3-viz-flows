@@ -1,5 +1,8 @@
 # vue3-viz-flows
 
+#### 사용자 액션 플로우차트 시각화 연습 프로젝트
+(완성 할수 있을진 모르겠다만 ㅠㅠ)
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
