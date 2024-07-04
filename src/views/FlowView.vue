@@ -26,6 +26,24 @@ engine.events.afterRun.subscribe(token, (result) => {
 })
 engine.start()
 
+
+// sample data
+const jsonData = [
+    { field1: 'value1' },
+    { field1: 'value1', field2: 'value2' },
+    { field1: 'value1', field2: 'value2', field3: 'value3' }
+]
+
+/*
+addNode(data) {
+      const node = this.editor.createNode('DynamicNode');
+      Object.keys(data).forEach(key => {
+        node.addInputInterface(key, 'string', data[key]);
+      });
+      this.editor.addNode(node);
+    }
+ */
+
 onMounted(() => {
     // TODO
 })
