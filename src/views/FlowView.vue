@@ -9,14 +9,18 @@
 import {BaklavaEditor, useBaklava} from "@baklavajs/renderer-vue";
 import {applyResult, DependencyEngine} from "baklavajs";
 import {onMounted} from "vue";
+import {StepNode} from "@/nodes/Step.js";
+import {InitNode} from "@/nodes/Init.js";
+import {EndNode} from "@/nodes/End.js";
 
 const baklava = useBaklava()
 baklava.settings.enableMinimap = true
 
 const engine = new DependencyEngine(baklava.editor)
 
-// TODO
-// baklava.editor.registerNodeType
+baklava.editor.registerNodeType(StepNode)
+baklava.editor.registerNodeType(InitNode)
+baklava.editor.registerNodeType(EndNode)
 
 const token = Symbol()
 engine.events.afterRun.subscribe(token, (result) => {
@@ -26,25 +30,46 @@ engine.events.afterRun.subscribe(token, (result) => {
 })
 engine.start()
 
-
 // sample data
 const jsonData = [
-    { field1: 'value1' },
-    { field1: 'value1', field2: 'value2' },
-    { field1: 'value1', field2: 'value2', field3: 'value3' }
+    { field1: 'value1', next_field: ''},
+    { field1: 'value1', field2: 'value2', next_field: ''},
+    { field1: 'value1', field2: 'value2', field3: 'value3', next_field: ''},
+    { field1: 'value1', field3: 'value3', next_field: ''}
 ]
 
-/*
-addNode(data) {
-      const node = this.editor.createNode('DynamicNode');
-      Object.keys(data).forEach(key => {
-        node.addInputInterface(key, 'string', data[key]);
-      });
-      this.editor.addNode(node);
-    }
- */
+const addNodeWithCoordinates = (nodeType, x, y) => {
+    const node = new nodeType();
+
+    baklava.displayedGraph.addNode(node);
+    node.position.x = x;
+    node.position.y = y;
+
+    return node;
+}
 
 onMounted(() => {
-    // TODO
+    const init = addNodeWithCoordinates(InitNode, 300, 140)
+    const step1 = addNodeWithCoordinates(StepNode, 700, 140)
+    const end1 = addNodeWithCoordinates(EndNode, 1100, 440)
+    const step2 = addNodeWithCoordinates(StepNode, 1100, 140)
+    const end = addNodeWithCoordinates(EndNode, 1500, 140)
+
+    baklava.displayedGraph.addConnection(
+        init.outputs.next_field,
+        step1.inputs.prev_field,
+    )
+    baklava.displayedGraph.addConnection(
+        step1.outputs.field1,
+        end1.inputs.prev_field,
+    )
+    baklava.displayedGraph.addConnection(
+        step1.outputs.field2,
+        step2.inputs.prev_field,
+    )
+    baklava.displayedGraph.addConnection(
+        step2.outputs.field3,
+        end.inputs.prev_field,
+    )
 })
 </script>
