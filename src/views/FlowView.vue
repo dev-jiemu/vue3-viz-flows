@@ -15,6 +15,7 @@ import {EndNode} from "@/nodes/End.js";
 
 const baklava = useBaklava()
 baklava.settings.enableMinimap = true
+baklava.settings.displayValueOnHover = true
 
 const engine = new DependencyEngine(baklava.editor)
 
