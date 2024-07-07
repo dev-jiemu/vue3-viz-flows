@@ -31,14 +31,6 @@ engine.events.afterRun.subscribe(token, (result) => {
 })
 engine.start()
 
-// sample data
-const jsonData = [
-    { field1: 'value1', next_field: ''},
-    { field1: 'value1', field2: 'value2', next_field: ''},
-    { field1: 'value1', field2: 'value2', field3: 'value3', next_field: ''},
-    { field1: 'value1', field3: 'value3', next_field: ''}
-]
-
 const addNodeWithCoordinates = (nodeType, x, y) => {
     const node = new nodeType();
 

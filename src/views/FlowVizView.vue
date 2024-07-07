@@ -8,13 +8,15 @@ import {applyResult, DependencyEngine} from "baklavajs";
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import {onMounted, ref} from "vue";
+import {InitNode} from "@/nodes/Init.js";
+import {StepNode} from "@/nodes/Step.js";
+import {EndNode} from "@/nodes/End.js";
 
 const baklava = useBaklava()
 baklava.settings.enableMinimap = true
 baklava.settings.displayValueOnHover = true
 
 const engine = new DependencyEngine(baklava.editor)
-
 
 const token = Symbol()
 engine.events.afterRun.subscribe(token, (result) => {
@@ -80,15 +82,40 @@ function extractSteps(data) {
     return steps;
 }
 
+function stepNodeCreate(stepName) {
+    let node
+
+    if (stepName === "FIRST") {
+        node = new InitNode()
+        node.title = stepName
+    }
+
+
+
+    return node;
+}
+
 // 데이터 처리
 const stepsData = ref([])
+const nodesData = ref([])
 
 onMounted(() => {
 stepsData.value = extractSteps(sampleData)
 
-    let predStep = ''
+    let prevStep = ''
     if (stepsData.value.length > 0) {
+        stepsData.value.forEach((item) => {
+            // step node create
+            let node = stepNodeCreate(item.stepName)
+            // baklava.editor.registerNodeType(InitNode) TODO: 확인요망
 
+            if (prevStep !== '') {
+                item.stepArray.forEach((obj) => {
+                    obj['prev_step'] = prevStep
+                })
+            }
+            prevStep = item.stepName
+        })
     }
 })
 </script>
