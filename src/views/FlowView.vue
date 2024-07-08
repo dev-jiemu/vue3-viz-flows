@@ -42,27 +42,25 @@ const addNodeWithCoordinates = (nodeType, x, y) => {
 }
 
 onMounted(() => {
-    const init = addNodeWithCoordinates(InitNode, 300, 140)
-    const step1 = addNodeWithCoordinates(StepNode, 700, 140)
-    const end1 = addNodeWithCoordinates(EndNode, 1100, 440)
-    const step2 = addNodeWithCoordinates(StepNode, 1100, 140)
-    const end = addNodeWithCoordinates(EndNode, 1500, 140)
+    const nodes = [
+        { node: InitNode, x: 300, y: 140 },
+        { node: StepNode, x: 700, y: 140 },
+        { node: EndNode, x: 1100, y: 640 },
+        { node: StepNode, x: 1100, y: 140 },
+        { node: EndNode, x: 1500, y: 140 }
+    ]
 
-    baklava.displayedGraph.addConnection(
-        init.outputs.next_field,
-        step1.inputs.prev_field,
-    )
-    baklava.displayedGraph.addConnection(
-        step1.outputs.field1,
-        end1.inputs.prev_field,
-    )
-    baklava.displayedGraph.addConnection(
-        step1.outputs.field2,
-        step2.inputs.prev_field,
-    )
-    baklava.displayedGraph.addConnection(
-        step2.outputs.field3,
-        end.inputs.prev_field,
-    )
+    const createdNodes = nodes.map(({ node, x, y }) => addNodeWithCoordinates(node, x, y));
+
+    const connections = [
+        { from: createdNodes[0].outputs.next_field, to: createdNodes[1].inputs.prev_field },
+        { from: createdNodes[1].outputs.field1, to: createdNodes[2].inputs.prev_field },
+        { from: createdNodes[1].outputs.field2, to: createdNodes[3].inputs.prev_field },
+        { from: createdNodes[3].outputs.field3, to: createdNodes[4].inputs.prev_field }
+    ]
+
+    connections.forEach(({ from, to }) => {
+        baklava.displayedGraph.addConnection(from, to);
+    })
 })
 </script>

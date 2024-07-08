@@ -1,4 +1,4 @@
-import {ButtonInterface, defineDynamicNode, defineNode, NodeInterface, SliderInterface, TextInterface} from "baklavajs";
+import {ButtonInterface, defineNode, NodeInterface, SliderInterface, TextInterface} from "baklavajs";
 
 // https://github.com/newcat/baklavajs/blob/master/docs/nodes/pre-defined-interfaces.md
 export const StepNode = defineNode({
@@ -16,3 +16,24 @@ export const StepNode = defineNode({
         field3: () => new NodeInterface("field3", "field3"),
     },
 })
+
+/*
+registerDynamicNode(nodeData) {
+      const { type, title, inputs, outputs } = nodeData;
+
+      const dynamicNode = defineNode({
+        type,
+        title,
+        inputs: inputs.reduce((acc, input) => {
+          acc[input.name] = () => new NodeInterface(input.label, input.value);
+          return acc;
+        }, {}),
+        outputs: outputs.reduce((acc, output) => {
+          acc[output.name] = () => new NodeInterface(output.label, output.value);
+          return acc;
+        }, {}),
+      });
+
+      this.editor.registerNodeType(dynamicNode);
+    }
+ */
