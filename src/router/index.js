@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import FlowView from "@/views/FlowView.vue";
 import FlowVizView from "@/views/FlowVizView.vue";
+import FlowCardView from "@/views/FlowCardView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
             path: '/flow_viz',
             name: 'flow_viz',
             component: FlowVizView,
+        },
+        {
+            path: '/flow_card',
+            name: 'flow_card',
+            component: FlowCardView,
         }
     ]
 })
