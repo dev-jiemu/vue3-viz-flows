@@ -1,22 +1,23 @@
 <template>
-    <v-container>
-        <!-- TODO: v-for -->
-        <v-card width="300">
-            <v-card-title>
-                TITLE
-            </v-card-title>
-            <v-divider/>
-            <v-card-text>
-                <v-card v-for="item in stepsData">
-                    {{ item.current_status }}
-                </v-card>
-            </v-card-text>
-        </v-card>
-    </v-container>
+    <div class="ma-3">
+        <template v-for="item in stepsData">
+            <node-props
+                :item="item"
+                :width="300"
+                :style="`translate(${item.position.x}px, ${item.position.y}px)`"
+                @update:position="updatePosition"
+            ></node-props>
+        </template>
+    </div>
 </template>
 <script setup>
+import NodeProps from '@/components/Node.vue'
+import {onMounted} from "vue";
+import {useStepStore} from "@/stores/step.js";
+import {storeToRefs} from "pinia";
 
-import {onMounted, ref} from "vue";
+const stepStore = useStepStore()
+const {stepsData} = storeToRefs(stepStore)
 
 const sampleData = `
 STEP:FIRST
@@ -55,29 +56,26 @@ STEP:STEP1
 ]
 `
 
-const stepsData = ref([])
-
-function extractSteps(data) {
-    const stepPattern = /STEP:(\w+)\n\[(.*?)\]/gs;
-    const steps = [];
-    let match;
-
-    while ((match = stepPattern.exec(data)) !== null) {
-        // STEP명을 추출
-        const stepName = match[1]
-
-        // STEP 밑의 array를 JSON object로 변환
-        const stepArray = JSON.parse(`[${match[2]}]`)
-
-        steps.push({stepName, stepArray})
+const updatePosition = (stepName, newPosition) => {
+    const step = stepsData.value.find(s => s.stepName === stepName)
+    if (step) {
+        step.position = Object.assign(newPosition, {})
     }
-
-    return steps
 }
 
+function logMousePosition(event) {
+    // event.clientX와 event.clientY는 클릭된 위치의 X, Y 좌표를 반환합니다.
+    const positionX = event.clientX;
+    const positionY = event.clientY;
+
+    // 콘솔에 X, Y 좌표를 출력합니다.
+    console.log(`Mouse Position: X=${positionX}, Y=${positionY}`);
+}
+
+// document의 클릭 이벤트에 logMousePosition 함수를 리스너로 추가합니다.
+document.addEventListener('click', logMousePosition);
 
 onMounted(() => {
-    stepsData.value = extractSteps(sampleData)
-    console.log(stepsData.value)
+    stepStore.extractSteps(sampleData)
 })
 </script>

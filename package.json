@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "baklavajs": "^2.4.5",
+    "interactjs": "^1.10.27",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-json-pretty": "^2.4.0",
@@ -17,6 +18,7 @@
     "vuetify": "^3.6.11"
   },
   "devDependencies": {
+    "@mdi/font": "^7.4.47",
     "@vitejs/plugin-vue": "^5.0.5",
     "vite": "^5.3.1"
   }
