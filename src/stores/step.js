@@ -1,18 +1,56 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 
+const sampleData = `
+STEP:FIRST
+[
+    {
+        "current_status": "INIT",
+        "message": "로딩중입니다"
+    },
+    {
+        "current_status": "SUCCESS",
+        "next_step": "STEP1",
+        "request_api": "/STEP2/new"
+    },
+    {
+        "current_status": "FAIL",
+        "next_step": "END"
+    }
+]
+
+STEP:STEP1
+[
+    {
+        "current_status": "LOADING",
+        "message": "STEP1 로딩중"
+    },
+    {
+        "current_status": "SUCCESS",
+        "message": "STEP1 로딩완료",
+        "next_step": "STEP2"
+    },
+    {
+        "current_status": "FAIL",
+        "message": "로딩실패",
+        "next_step": "END"
+    }
+]
+`
+
 export const useStepStore = defineStore('step', () => {
     const stepsData = ref([])
 
-    let positionX = 200
-    let positionY = 150
+    let positionX = 50
+    let positionY = 50
 
-    function extractSteps(data) {
+    function extractSteps() {
         const stepPattern = /STEP:(\w+)\n\[(.*?)\]/gs;
         stepsData.value = []
         let match;
 
-        while ((match = stepPattern.exec(data)) !== null) {
+        // TODO:: update
+        while ((match = stepPattern.exec(sampleData)) !== null) {
             // STEP명을 추출
             const stepName = match[1]
 
@@ -21,7 +59,7 @@ export const useStepStore = defineStore('step', () => {
 
             // TODO: 저장된거 setting
             const position = {x: positionX, y: positionY}
-            positionY += 200
+            positionX += 350
 
             stepsData.value.push({stepName, position, stepArray})
         }

@@ -9,8 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@baklavajs/core": "^2.4.4",
+    "@baklavajs/plugin-renderer-vue": "^1.10.2",
+    "@baklavajs/renderer-vue": "^2.4.5",
+    "@vue-flow/core": "^1.38.5",
     "baklavajs": "^2.4.5",
     "interactjs": "^1.10.27",
+    "jsplumb": "^2.15.6",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-json-pretty": "^2.4.0",
