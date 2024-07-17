@@ -14,7 +14,7 @@
         <controls/>
         <dropzone-background/>
 
-        <!-- custom nodes -->
+        <!-- custom props -->
         <template #node-first="props">
             <init-node v-bind="{...props}"/>
         </template>
@@ -33,11 +33,11 @@ import {useVueFlow, VueFlow} from '@vue-flow/core'
 import {MiniMap} from "@vue-flow/minimap";
 import {Controls} from '@vue-flow/controls'
 
-import DropzoneBackground from "@/components/DropzoneBackground.vue";
-import InitNode from "@/components/nodes/Init.vue"
-import StepNode from "@/components/nodes/Step.vue"
-import EndNode from "@/components/nodes/End.vue"
-import {useServiceStore} from "@/stores/Service.js";
+import DropzoneBackground from "@/components/common/dropzone_background.vue";
+import InitNode from "@/components/demos/nodes/init.vue"
+import StepNode from "@/components/demos/nodes/step.vue"
+import EndNode from "@/components/demos/nodes/end.vue"
+import {useServiceStore} from "@/stores/demos/service.js";
 import {storeToRefs} from "pinia";
 
 const {addEdges} = useVueFlow()
