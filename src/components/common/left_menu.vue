@@ -13,15 +13,15 @@
 
             <v-divider></v-divider>
 
-            <v-list v-for="(item, idx) in menuItem">
+            <v-list v-for="item in menuItem">
                 <v-list-subheader v-if="item.type === 'subheader'">{{ item.title }}</v-list-subheader>
                 <v-divider v-else-if="item.type === 'divider'"/>
                 <v-list-item v-else
-                    :key="'link ' + idx"
-                    :to="item.url"
+                    :key="item.type + '_' + item.seqno"
                     class="text-left"
-                    color="primary"
-                    rounded="xl">
+                    color="success"
+                    rounded="xl"
+                    @click="goDetail(item)">
                     <v-list-item-title v-text="item.title"/>
                 </v-list-item>
             </v-list>
@@ -32,6 +32,7 @@
 import {computed, onMounted} from "vue";
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
+import router from "@/router/index.js";
 
 const editorStore = useEditorStore()
 const { scnList } = storeToRefs(editorStore)
@@ -46,7 +47,9 @@ const menuItem = computed(() => {
         item.list.forEach((node) => {
             result.push({
                 title: node.scn_name,
-                url: `/editor/${node.scn_seqno}/${item.type}` // /:id/:type
+                seqno: node.scn_seqno,
+                type: item.type,
+                url: `/editor/viewer/${node.scn_seqno}/${item.type}`
             })
         })
 
@@ -55,6 +58,14 @@ const menuItem = computed(() => {
 
     return result
 })
+
+const goDetail = (item) => { // TODO: 이거 그냥 onMounted 처리 할수 있지 않냐....?
+    editorStore.getScnInfo({
+        seqno: item.seqno,
+        type: item.type,
+    })
+    router.push(item.url)
+}
 
 onMounted(() => {
     console.log('common.left_menu()')

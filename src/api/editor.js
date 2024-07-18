@@ -5,7 +5,6 @@ export default {
         let reqUrl = '/editor'
 
         commonApi.GET(reqUrl, (data) => {
-            console.log(data)
             if (scb) {
                 let {node_list} = data
                 scb(node_list)
@@ -17,7 +16,7 @@ export default {
         })
     },
     getScnDetail(param, scb, fcb) {
-        let reqUrl = '/editor/' + param.seqno + '/' + param.scn_type
+        let reqUrl = '/editor/' + param.seqno + '/' + param.type
 
         commonApi.GET(reqUrl, (data) => {
             if(scb) {

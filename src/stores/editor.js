@@ -39,20 +39,49 @@ export const useEditorStore = defineStore('editor', () => {
         console.log('editor.getScnInfo()')
 
         editorApi.getScnDetail(param, (nodeDetail) => {
-            if (nodeDetail && nodeDetail.seqno !== 0 && nodeDetail.length > 0) {
+            if (nodeDetail && nodeDetail.seqno > 0) {
+                scnInfo.value = {}
+
                 scnInfo.value.type = nodeDetail.type
                 scnInfo.value.seqno = nodeDetail.seqno
 
-                let result = []
-                nodeDetail.step_list.forEach((item) => {
-                    result.push(item)
-                })
-
-                scnInfo.value.stepList = result
+                if (nodeDetail.step_list && nodeDetail.step_list.length > 0) {
+                    let result = []
+                    nodeDetail.step_list.forEach((item) => {
+                        result.push(item)
+                    })
+                    scnInfo.value.stepList = result
+                }
             }
         }, (err) => {
             console.error('editor.getScnInfo ERROR : ', err)
         })
+    }
+
+    const extractActions = (item) => {
+        let action = {}
+
+        let actionArray = JSON.parse(item.event_actions)
+
+        // node type setting
+        // init(INIT), step, end(WAIT_END)
+        let nodeType = 'step'
+        if (item.step_id === 'INIT') {
+            nodeType = 'init'
+        } else if (item.step_id === 'WAIT_END') {
+            nodeType = 'end'
+        }
+
+        action = {
+            id: '', // TODO: id 규격 정의
+            type: nodeType,
+            data: {
+                stepId: item.step_id,
+                stepAction: actionArray
+            }
+        }
+
+        return action
     }
 
     return {
@@ -60,5 +89,6 @@ export const useEditorStore = defineStore('editor', () => {
         scnInfo,
         getScnList,
         getScnInfo,
+        extractActions,
     }
 })
