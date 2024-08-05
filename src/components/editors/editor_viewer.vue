@@ -50,7 +50,7 @@ const viewerInfo = computed(() => {
 
     if(scnInfo.value.stepList && scnInfo.value.stepList.length > 0) {
         scnInfo.value.stepList.forEach((item) => {
-            console.log('extract: ', editorStore.extractActions(item))
+            result.push(editorStore.extractActions(item))
         })
     }
 

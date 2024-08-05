@@ -1,16 +1,28 @@
 <template>
     <div id="div_background">
-
+        <v-card width="300" class="pa-2">
+            <v-card-title class="text-h6">
+                <v-row>
+                    <v-col cols="1" class="text-center mr-1">
+                        <v-icon icon="mdi-circle" size="x-small"></v-icon>
+                    </v-col>
+                    <v-col class="text-left ml-1">{{ sample.data.stepId }}</v-col>
+                </v-row>
+            </v-card-title>
+            <v-divider/>
+            <template v-for="(item, idx) in sample.data.stepAction">
+                <prop-action
+                    :item="item"
+                    :index="idx"
+                    :step="sample.data.stepId">
+                </prop-action>
+            </template>
+        </v-card>
     </div>
 </template>
 <script setup>
-
-let sample = []
-
 /*
-    TODO: step_id 기준으로 node 구성
-
-    [ handle:target ] STEP_ID
+    [handle:target] STEP_ID
     --------------------------------
      action_type : codition_status
     [-------------------------------] [handle:source]
@@ -26,6 +38,14 @@ let sample = []
  */
 
 
+import {onMounted} from "vue";
+import propAction from './prop_action.vue'
+
+
+// TODO: 데이터 제외하고 push
+const sample = {
+
+}
 </script>
 <style scoped>
 #div_background {

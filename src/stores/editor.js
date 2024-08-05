@@ -72,13 +72,20 @@ export const useEditorStore = defineStore('editor', () => {
             nodeType = 'end'
         }
 
-        action = {
-            id: '', // TODO: id 규격 정의
-            type: nodeType,
-            data: {
-                stepId: item.step_id,
-                stepAction: actionArray
+        action.type = nodeType
+        if (item.step_id !== 'INIT') {
+            action.id = item.step_id // target id
+        }
+
+        for (let i = 0; i < actionArray.length; i++) {
+            if (actionArray[i].hasOwnProperty('next_step_id')) {
+                actionArray[i].id = `${item.step_id}_${i}_${actionArray[i].next_step_id}` // source_id
             }
+        }
+
+        action.data = {
+            stepId: item.step_id,
+            stepAction: actionArray
         }
 
         return action
