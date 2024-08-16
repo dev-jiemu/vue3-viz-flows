@@ -27,7 +27,9 @@ import {MiniMap} from "@vue-flow/minimap";
 import {Controls} from '@vue-flow/controls'
 
 import DropzoneBackground from "@/components/common/dropzone_background.vue";
+
 import NodeInit from "@/components/editors/props/node_init.vue"
+import NodeStep from "@/components/editors/props/node_step.vue"
 
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
