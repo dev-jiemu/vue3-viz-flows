@@ -1,0 +1,94 @@
+<template>
+    <div class="node-wrapper">
+        <div style="width: 300px;" class="pa-2">
+            <v-card-title class="text-h6">
+                <v-row>
+                    <v-col cols="1" class="text-center mr-1">
+                        <v-icon icon="mdi-arrow-right-bold" size="x-small"/>
+                        <handle type="target" :position="Position.Left" class="handle-target" style="top: 30px;"/>
+                    </v-col>
+                    <v-col class="text-left ml-1">{{ props.data.step_id }}</v-col>
+                </v-row>
+            </v-card-title>
+            <v-divider/>
+            <div class="ma-1">
+                <template v-for="(item, idx) in props.data.step_action">
+                    <v-card-text class="pa-2">
+                        <v-row>
+                            <v-col cols="9" class="text-left mt-2">
+                                <v-chip color="success" variant="outlined" size="small">{{ item.event_type }}</v-chip>
+                                <span v-if="item.cond_code !== null && item.cond_code !== undefined">
+                    : <v-chip color="gray" size="small">{{ item.cond_code }}</v-chip>
+                </span>
+                            </v-col>
+                            <v-col cols="1" class="text-center mt-2">
+                                <v-icon icon="mdi-details" size="small" color="blue"></v-icon>
+                            </v-col>
+                            <v-col class="text-center mt-2 mr-1"
+                                   v-if="item.next_step_id !== undefined && item.next_step_id !== null">
+                                <Handle
+                                    :id="'source-' + idx" type="source"
+                                    :position="Position.Right"
+                                    :style="sourcePosition[idx]"
+                                    class="handle-source">
+                                </Handle>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>
+<script setup>
+import {Handle, Position} from "@vue-flow/core";
+import {computed} from "vue";
+
+const props = defineProps({
+    id: String,
+    type: String,
+    data: Object,
+    position: Object,
+})
+
+// TODO: 위치조정 필요
+const sourcePosition = computed(() => {
+    const length = props.data.step_action.length
+
+    const baseTop = 30
+    const spacing = 60 / (length - 1)
+
+    const positions = []
+    for (let i = 0; i < length; i++) {
+        const topValue = baseTop + (spacing * i)
+        positions.push({top: `${topValue}%`})
+    }
+
+    return positions
+})
+
+</script>
+<style scoped>
+.node-wrapper {
+    position: relative;
+}
+
+.handle-source {
+    position: absolute;
+    width: 15px !important;
+    height: 15px !important;
+    background-color: lightblue !important;
+    border: 2px solid darkkhaki !important;
+    border-radius: 50% !important;
+    z-index: 1;
+}
+
+.handle-target {
+    width: 20px !important;
+    height: 20px !important;
+    background-color: lightpink !important;
+    border: 3px solid darkred !important;
+    border-radius: 50% !important;
+    z-index: 1;
+}
+</style>

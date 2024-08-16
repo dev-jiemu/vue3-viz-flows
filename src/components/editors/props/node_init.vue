@@ -1,7 +1,9 @@
 <template>
     <div class="node-wrapper">
-        <v-card class="bg-blue-grey-darken-3">
-            
+        <v-card class="bg-blue-grey-darken-3 pa-2" width="300">
+            <v-card-title class="text-h6">
+
+            </v-card-title>
         </v-card>
     </div>
 </template>

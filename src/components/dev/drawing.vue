@@ -1,30 +1,50 @@
 <template>
-    <div id="div_background">
-        <v-card width="300" class="pa-2">
-            <v-card-title class="text-h6">
-                <v-row>
-                    <v-col cols="1" class="text-center mr-1">
-                        <v-icon icon="mdi-circle" size="x-small"></v-icon>
-                    </v-col>
-                    <v-col class="text-left ml-1">{{ sample.data.stepId }}</v-col>
-                </v-row>
-            </v-card-title>
-            <v-divider/>
-            <template v-for="(item, idx) in sample.data.stepAction">
-                <prop-action
-                    :item="item"
-                    :index="idx"
-                    :step="sample.data.stepId">
-                </prop-action>
-            </template>
-        </v-card>
-    </div>
+    <vue-flow
+        :nodes="sampleNodes"
+        :class="{ dark }"
+        class="basic-flow"
+        :default-viewport="{ zoom: 1.5 }"
+        :min-zoom="0.2"
+        :max-zoom="4"
+        :fit-view-on-init="true"
+    >
+        <mini-map/>
+        <controls/>
+        <dropzone-background/>
+
+        <template #node-step="props">
+            <step-node v-bind="{...props}"/>
+        </template>
+    </vue-flow>
 </template>
 <script setup>
+import {useVueFlow, VueFlow} from '@vue-flow/core'
+import {onMounted, ref} from "vue";
+import {MiniMap} from "@vue-flow/minimap";
+import DropzoneBackground from "@/components/common/dropzone_background.vue";
+import {Controls} from "@vue-flow/controls";
+import stepNode from '@/components/dev/step_node.vue'
+
+const dark = true
+
+// TODO: 데이터 제외하고 push
+const sampleNodes = ref([
+    {
+        "type": "step",
+        "data": {
+            "step_id": "SEND",
+            "step_action": [
+            ]
+        },
+        "id": "SEND",
+        "position": {x: 40, y: 5}, // sample
+    }
+])
+
 /*
     [handle:target] STEP_ID
     --------------------------------
-     action_type : codition_status
+     action_type : condition_status
     [-------------------------------] [handle:source]
     else
 
@@ -36,21 +56,4 @@
 
     이렇게 하면 source N : target 1 형태의 edge 를 그릴 수 있음
  */
-
-
-import {onMounted} from "vue";
-import propAction from './prop_action.vue'
-
-
-// TODO: 데이터 제외하고 push
-const sample = {
-
-}
 </script>
-<style scoped>
-#div_background {
-    background: darkgray;
-    width: 100%;
-    height: 100%;
-}
-</style>
