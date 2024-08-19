@@ -59,7 +59,7 @@ const menuItem = computed(() => {
     return result
 })
 
-const goDetail = (item) => { // TODO: 이거 그냥 onMounted 처리 할수 있지 않냐....?
+const goDetail = (item) => {
     editorStore.getScnInfo({
         seqno: item.seqno,
         type: item.type,

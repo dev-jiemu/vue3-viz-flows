@@ -13,7 +13,13 @@
         </div>
         <v-divider/>
         <div class="ma-1">
-
+            <div class="pa-2">
+                <v-row>
+                    <v-col cols="9">
+                        <v-chip color="red" variant="outlined" size="small">GO_END</v-chip>
+                    </v-col>
+                </v-row>
+            </div>
         </div>
     </div>
 </template>

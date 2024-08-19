@@ -1,22 +1,28 @@
 <template>
-    <!--        :edges="edges"-->
-    <!--        @connect="onConnect" -->
     <vue-flow
-        :props="viewerInfo"
+        :nodes="nodes"
+        :edges="edges"
         :class="{ dark }"
         class="basic-flow"
         :default-viewport="{ zoom: 1.5 }"
         :min-zoom="0.2"
         :max-zoom="4"
-        :fit-view-on-init="true">
+        :fit-view-on-init="true"
+        @connect="onConnect">
 
         <mini-map/>
         <controls/>
         <dropzone-background/>
 
-        <!-- TODO: custom node -->
+        <!-- custom nodes -->
         <template #node-init="props">
             <node-init v-bind="{...props}"/>
+        </template>
+        <template #node-step="props">
+            <node-step v-bind="{...props}"/>
+        </template>
+        <template #node-end="props">
+            <node-end v-bind="{...props}"/>
         </template>
 
     </vue-flow>
@@ -30,31 +36,45 @@ import DropzoneBackground from "@/components/common/dropzone_background.vue";
 
 import NodeInit from "@/components/editors/props/node_init.vue"
 import NodeStep from "@/components/editors/props/node_step.vue"
+import NodeEnd from "@/components/editors/props/node_end.vue"
 
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
 import {computed} from "vue";
-import {useRoute} from "vue-router";
 
-const {addEdges} = useVueFlow()
+const instance = useVueFlow()
 
 const editorStore = useEditorStore()
 const { scnInfo } = storeToRefs(editorStore)
 
 const dark = true
-//
-// const onConnect = (params) => {
-//     addEdges(params)
-// }
 
-const viewerInfo = computed(() => {
+// TODO
+const onConnect = (params) => {
+    // instance.addEdges(params)
+}
+
+// TODO : node update
+const nodes = computed(() => {
     let result = []
 
-    if(scnInfo.value.stepList && scnInfo.value.stepList.length > 0) {
+    console.log(scnInfo.value)
+    if (scnInfo.value.stepList !== undefined && scnInfo.value.stepList.length > 0) {
         scnInfo.value.stepList.forEach((item) => {
-            result.push(editorStore.extractActions(item))
+            let obj = editorStore.extractActions(item)
+            console.log(obj)
+            result.push(obj)
         })
     }
+
+    console.log('nodes computed result : ', result)
+
+    return result
+})
+
+// TODO
+const edges = computed(() => {
+    let result = []
 
     return result
 })

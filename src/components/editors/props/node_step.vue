@@ -7,12 +7,12 @@
                         <v-icon icon="mdi-ray-start-end" size="x-small"/>
                         <handle type="target" :position="Position.Left" class="handle-target" style="top: 30px;"/>
                     </v-col>
-                    <v-col class="text-left ml-1">{{ props.data.step_id }}</v-col>
+                    <v-col class="text-left ml-1">{{ props.data.stepId }}</v-col>
                 </v-row>
             </div>
             <v-divider/>
             <div class="ma-1">
-                <template v-for="(item, idx) in props.data.step_action">
+                <template v-for="(item, idx) in props.data.stepAction">
                     <div class="pa-2">
                         <v-row>
                             <v-col cols="9" class="text-left mt-2">
@@ -53,10 +53,10 @@ const props = defineProps({
 
 // TODO: 간격 정의
 const sourcePosition = computed(() => {
-    const length = props.data.step_action.length
+    const length = props.data.stepAction.length
 
     const spacing = (40 * length) / (length - 1)
-    console.log('spacing : ', spacing)
+    console.log(`length: ${length}, spacing: ${spacing}`)
 
     const positions = []
     for (let i = 0; i < length; i++) {

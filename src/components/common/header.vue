@@ -24,6 +24,6 @@
 import router from "@/router/index.js";
 
 const goMain = () => {
-    router.push('/')
+    router.push('/editor')
 }
 </script>

@@ -10,6 +10,10 @@ export const useEditorStore = defineStore('editor', () => {
     // choose scn data
     const scnInfo = ref({})
 
+    // node position setting
+    let positionX = 100
+    let positionY = 10
+
     const getScnList = () => {
         console.log('editor.getScnList()')
 
@@ -73,9 +77,14 @@ export const useEditorStore = defineStore('editor', () => {
         }
 
         action.type = nodeType
-        if (item.step_id !== 'INIT') {
-            action.id = item.step_id // target id
+        action.id = item.step_id // target id
+        action.position = {
+            x: positionX,
+            y: positionY,
         }
+
+        // TODO : position setting
+        positionX = positionX + 400
 
         for (let i = 0; i < actionArray.length; i++) {
             if (actionArray[i].hasOwnProperty('next_step_id')) {

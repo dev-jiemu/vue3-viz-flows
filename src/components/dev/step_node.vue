@@ -30,7 +30,7 @@
                                     :id="'source-' + idx" type="source"
                                     :position="Position.Right"
                                     :style="sourcePosition[idx]"
-                                    class="handle-source">
+                                    class="handle-source mb-4">
                                 </Handle>
                             </v-col>
                         </v-row>
@@ -51,17 +51,16 @@ const props = defineProps({
     position: Object,
 })
 
-// TODO: 위치조정 필요
+// TODO: 간격 정의
 const sourcePosition = computed(() => {
     const length = props.data.step_action.length
 
-    const baseTop = 30
-    const spacing = 60 / (length - 1)
+    const spacing = (40 * length) / (length - 1)
+    console.log('spacing : ', spacing)
 
     const positions = []
     for (let i = 0; i < length; i++) {
-        const topValue = baseTop + (spacing * i)
-        positions.push({top: `${topValue}%`})
+        positions.push({bottom: `${spacing * i}px`, top: 'auto'})
     }
 
     return positions
