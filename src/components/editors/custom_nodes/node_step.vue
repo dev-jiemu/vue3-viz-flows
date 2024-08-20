@@ -1,17 +1,17 @@
 <template>
     <div class="node-wrapper">
-        <div style="width: 300px;" class="pa-2">
-            <div class="text-h6">
+        <div class="pa-2" style="width: 300px;">
+            <div class="text-h6" style="height: 40px;">
                 <v-row>
-                    <v-col cols="1" class="text-center mr-1">
-                        <v-icon icon="mdi-ray-start-end" size="x-small"/>
-                        <handle type="target" :position="Position.Left" class="handle-target" style="top: 30px;"/>
+                    <v-col cols="1" class="text-center">
+                        <handle type="target" :position="Position.Left" class="handle-target" style="top: 20px;"/>
+                        <v-icon class="mb-1 ml-2" icon="mdi-ray-start-end" size="x-small"/>
                     </v-col>
-                    <v-col class="text-left ml-1">{{ props.data.stepId }}</v-col>
+                    <v-col class="text-left ml-3">{{ props.data.stepId }}</v-col>
                 </v-row>
             </div>
-            <v-divider/>
-            <div class="ma-1">
+            <v-divider class="mt-1"/>
+            <div class="ma-1" ref="stepWrapper">
                 <template v-for="(item, idx) in props.data.stepAction">
                     <div class="pa-2">
                         <v-row>
@@ -22,12 +22,13 @@
                 </span>
                             </v-col>
                             <v-col cols="1" class="text-center mt-2">
-                                <v-icon icon="mdi-details" size="small" color="blue"></v-icon>
+                                <v-icon icon="mdi-dots-horizontal-circle-outline" size="small" color="blue"></v-icon>
                             </v-col>
                             <v-col class="text-center mt-2 mr-1"
                                    v-if="item.next_step_id !== undefined && item.next_step_id !== null">
                                 <Handle
-                                    :id="'source-' + idx" type="source"
+                                    :id="'source-' + idx"
+                                    type="source"
                                     :position="Position.Right"
                                     :style="sourcePosition[idx]"
                                     class="handle-source mb-4">
@@ -42,7 +43,7 @@
 </template>
 <script setup>
 import {Handle, Position} from "@vue-flow/core";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
     id: String,
@@ -51,19 +52,22 @@ const props = defineProps({
     position: Object,
 })
 
-// TODO: 간격 정의
+const stepWrapper = ref(null)
+
 const sourcePosition = computed(() => {
     const length = props.data.stepAction.length
-
-    const spacing = (40 * length) / (length - 1)
-    console.log(`length: ${length}, spacing: ${spacing}`)
+    const spacing = totalHeight.value / length
 
     const positions = []
     for (let i = 0; i < length; i++) {
-        positions.push({bottom: `${spacing * i}px`, top: 'auto'})
+        positions.push({bottom: `${(spacing * i)}px`, top: 'auto'})
     }
 
     return positions
+})
+
+const totalHeight = computed(() => {
+    return stepWrapper.value?.offsetHeight || 0
 })
 </script>
 <style scoped>
@@ -73,8 +77,8 @@ const sourcePosition = computed(() => {
 
 .handle-source {
     position: absolute;
-    width: 15px !important;
-    height: 15px !important;
+    width: 20px !important;
+    height: 20px !important;
     background-color: lightblue !important;
     border: 2px solid darkkhaki !important;
     border-radius: 50% !important;

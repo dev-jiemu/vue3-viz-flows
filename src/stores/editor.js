@@ -1,6 +1,6 @@
 import editorApi from '@/api/editor.js'
 import {defineStore} from "pinia";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 export const useEditorStore = defineStore('editor', () => {
 
@@ -100,9 +100,34 @@ export const useEditorStore = defineStore('editor', () => {
         return action
     }
 
+    const scnNodes = computed(() => {
+        let result = []
+
+        positionX = 100 // TODO: position setting
+        if (scnInfo.value.stepList !== undefined && scnInfo.value.stepList.length > 0) {
+            scnInfo.value.stepList.forEach((item) => {
+                let obj = extractActions(item)
+                result.push(obj)
+            })
+        }
+
+        console.log('scnNodes result : ', result)
+
+        return result
+    })
+
+    // TODO : edges 구성
+    const scnEdges = computed(() => {
+        let result = []
+
+        return result
+    })
+
     return {
         scnList,
         scnInfo,
+        scnNodes,
+        scnEdges,
         getScnList,
         getScnInfo,
         extractActions,
