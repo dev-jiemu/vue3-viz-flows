@@ -1,6 +1,7 @@
 import editorApi from '@/api/editor.js'
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
+import {MarkerType} from "@vue-flow/core";
 
 export const useEditorStore = defineStore('editor', () => {
 
@@ -68,12 +69,10 @@ export const useEditorStore = defineStore('editor', () => {
         let actionArray = JSON.parse(item.event_actions)
 
         // node type setting
-        // init(INIT), step, end(WAIT_END)
+        // init(INIT), step
         let nodeType = 'step'
         if (item.step_id === 'INIT') {
             nodeType = 'init'
-        } else if (item.step_id === 'WAIT_END') {
-            nodeType = 'end'
         }
 
         action.type = nodeType
@@ -109,6 +108,16 @@ export const useEditorStore = defineStore('editor', () => {
                 let obj = extractActions(item)
                 result.push(obj)
             })
+
+            // END 노드 추가
+            result.push({
+                type: 'end',
+                id: 'END',
+                position: {
+                    x: positionX,
+                    y: positionY,
+                },
+            })
         }
 
         console.log('scnNodes result : ', result)
@@ -116,9 +125,44 @@ export const useEditorStore = defineStore('editor', () => {
         return result
     })
 
-    // TODO : edges 구성
     const scnEdges = computed(() => {
         let result = []
+        let idx = 0 // temp
+
+        if (scnNodes.value !== [] && scnNodes.value.length > 0) {
+            scnNodes.value.forEach(item => {
+                if (item.id !== 'END') {
+                    // TODO: edge line color setting : step
+                    item.data.stepAction.forEach(obj => {
+                        // stepAction id : source -> next_step_id : target
+                        if (obj.hasOwnProperty("id") && obj.hasOwnProperty("next_step_id")) {
+                            let edge = {
+                                id: `edge-${idx++}`,
+                                source: item.data.stepId,
+                                sourceHandle: obj.id,
+                                target: obj.next_step_id,
+                                targetHandle: obj.next_step_id,
+                            }
+
+                            // target : end
+                            if (obj.next_step_id === 'END') {
+                                edge.style = { stroke: 'red', border: 'dashed' }
+                                edge.markerEnd = MarkerType.ArrowClosed
+                            }
+
+                            if (obj.hasOwnProperty("cg_action_type")) {
+                                edge.label = obj.cg_action_type
+                                edge.labelBgStyle = { fill: 'orange' }
+                                edge.labelStyle = { fontWeight: 'bold', fill: 'white', fontSize: '14px' }
+                            }
+
+                            result.push(edge)
+                        }
+                    })
+                }
+            })
+        }
+        console.log('scnEdges : ', result)
 
         return result
     })

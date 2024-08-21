@@ -4,8 +4,13 @@
             <div class="text-h6" style="height: 40px;">
                 <v-row>
                     <v-col cols="1" class="text-center">
-                        <handle type="target" :position="Position.Left" class="handle-target" style="top: 20px;"/>
-                        <v-icon class="mb-1 ml-2" icon="mdi-ray-start-end" size="x-small"/>
+                        <Handle
+                            :id="props.data.stepId"
+                            type="target"
+                            :position="Position.Left"
+                            class="handle-target"
+                            style="top: 20px;"/>
+                        <v-icon class="mb-1 ml-2" icon="mdi-playlist-play" size="x-small"/>
                     </v-col>
                     <v-col class="text-left ml-3">{{ props.data.stepId }}</v-col>
                 </v-row>
@@ -22,12 +27,12 @@
                 </span>
                             </v-col>
                             <v-col cols="1" class="text-center mt-2">
-                                <v-icon icon="mdi-dots-horizontal-circle-outline" size="small" color="blue"></v-icon>
+                                <v-icon icon="mdi-dots-horizontal-circle-outline" color="blue"></v-icon>
                             </v-col>
                             <v-col class="text-center mt-2 mr-1"
                                    v-if="item.next_step_id !== undefined && item.next_step_id !== null">
                                 <Handle
-                                    :id="'source-' + idx"
+                                    :id="item.id"
                                     type="source"
                                     :position="Position.Right"
                                     :style="sourcePosition[idx]"
@@ -60,7 +65,7 @@ const sourcePosition = computed(() => {
 
     const positions = []
     for (let i = 0; i < length; i++) {
-        positions.push({bottom: `${(spacing * i)}px`, top: 'auto'})
+        positions.push({top: `${(spacing * i) + 70}px`})
     }
 
     return positions
@@ -73,6 +78,9 @@ const totalHeight = computed(() => {
 <style scoped>
 .node-wrapper {
     position: relative;
+    background-color: white;
+    border: 1px dashed black;
+    border-radius: 10px;
 }
 
 .handle-source {

@@ -1,8 +1,8 @@
 <template>
     <vue-flow
+        ref="vueFlowRef"
         :nodes="scnNodes"
         :edges="scnEdges"
-        :class="{ dark }"
         class="basic-flow"
         :default-viewport="{ zoom: 1.5 }"
         :min-zoom="0.2"
@@ -40,15 +40,22 @@ import NodeEnd from "@/components/editors/custom_nodes/node_end.vue"
 
 import {useEditorStore} from "@/stores/editor.js"
 import {storeToRefs} from "pinia"
+import {onMounted, ref} from "vue";
+
+const vueFlowRef = ref(null)
 
 const instance = useVueFlow()
 
 const editorStore = useEditorStore()
 const { scnNodes, scnEdges } = storeToRefs(editorStore)
 
-const dark = true
-
 const onConnect = (params) => {
+    console.log('onConnect params : ', params)
     instance.addEdges(params)
 }
+
+onMounted(() => {
+    console.log(vueFlowRef.value) // TODO: reset
+})
+
 </script>
