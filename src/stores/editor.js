@@ -83,7 +83,7 @@ export const useEditorStore = defineStore('editor', () => {
         }
 
         // TODO : position setting
-        positionX = positionX + 400
+        positionX = positionX + 500
 
         for (let i = 0; i < actionArray.length; i++) {
             if (actionArray[i].hasOwnProperty('next_step_id')) {
@@ -139,7 +139,7 @@ export const useEditorStore = defineStore('editor', () => {
                             let edge = {
                                 id: `edge-${idx++}`,
                                 source: item.data.stepId,
-                                sourceHandle: obj.id,
+                                sourceHandle: obj.id, // 사실 같은값임...ㅇㅂㅇ...
                                 target: obj.next_step_id,
                                 targetHandle: obj.next_step_id,
                             }
@@ -150,6 +150,7 @@ export const useEditorStore = defineStore('editor', () => {
                                 edge.markerEnd = MarkerType.ArrowClosed
                             }
 
+                            // label : action_type
                             if (obj.hasOwnProperty("cg_action_type")) {
                                 edge.label = obj.cg_action_type
                                 edge.labelBgStyle = { fill: 'orange' }

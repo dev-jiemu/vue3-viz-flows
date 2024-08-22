@@ -1,6 +1,6 @@
 <template>
     <div class="node-wrapper">
-        <div class="pa-2" style="width: 300px;">
+        <div class="pa-2" style="width: 350px;">
             <div class="text-h6" style="height: 40px;">
                 <v-row>
                     <v-col cols="1" class="text-center mr-1">
@@ -17,11 +17,12 @@
                             <v-col cols="9" class="text-left mt-2">
                                 <v-chip color="success" variant="outlined" size="small">{{ item.event_type }}</v-chip>
                                 <span v-if="item.cond_code !== null && item.cond_code !== undefined">
-                    : <v-chip color="gray" size="small">{{ item.cond_code }}</v-chip>
-                </span>
+                                    : <v-chip color="gray" size="small">{{ item.cond_code }}</v-chip>
+                                </span>
+                                <prop-tooltip v-if="item.ment_text" :message="item.ment_text"></prop-tooltip>
                             </v-col>
-                            <v-col cols="1" class="text-center mt-2">
-                                <v-icon icon="mdi-dots-horizontal-circle-outline" color="blue"></v-icon>
+                            <v-col cols="1" class="text-right mt-1">
+                                <v-icon class="ml-2" icon="mdi-chevron-down" size="large" color="indigo" @click="openPopup(item)"></v-icon>
                             </v-col>
                             <v-col class="text-center mr-1"
                                    v-if="item.next_step_id !== undefined && item.next_step_id !== null">
@@ -43,6 +44,7 @@
 import '@vue-flow/core/dist/style.css';
 import {Handle, Position} from "@vue-flow/core";
 import {computed, ref} from "vue";
+import PropTooltip from '@/components/editors/props/tooltip.vue'
 
 const props = defineProps({
     id: String,
@@ -50,6 +52,8 @@ const props = defineProps({
     data: Object,
     position: Object,
 })
+
+const emits = defineEmits(['open-detail'])
 
 const stepWrapper = ref(null)
 
@@ -69,6 +73,10 @@ const totalHeight = computed(() => {
     return stepWrapper.value?.offsetHeight || 0
 })
 
+const openPopup = (item) => {
+    emits('open-detail', item)
+}
+
 </script>
 <style scoped>
 .node-wrapper {
@@ -82,8 +90,8 @@ const totalHeight = computed(() => {
     position: absolute;
     width: 20px !important;
     height: 20px !important;
-    background-color: lightblue !important;
-    border: 2px solid darkkhaki !important;
+    background-color: skyblue !important;
+    border: 3px solid darkblue !important;
     border-radius: 50% !important;
     z-index: 1;
 }
