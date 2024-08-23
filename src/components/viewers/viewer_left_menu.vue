@@ -1,17 +1,17 @@
 <template>
     <v-navigation-drawer floating>
         <div class="px-2 my-2">
-            <v-text-field
-                class="mb-4 mt-4"
-                label="search"
-                density="compact"
-                prepend-inner-icon="mdi-magnify"
-                variant="solo-filled"
-                flat
-                hide-details
-            ></v-text-field>
+            <v-btn flat
+                   class="ma-4"
+                   variant="outlined"
+                   color="teal-darken-4"
+                   prepend-icon="mdi-brush-outline"
+                   @click="goEditor"
+            >
+                GO EDITOR MODE
+            </v-btn>
 
-            <v-divider></v-divider>
+            <v-divider class="ma-2"/>
 
             <v-list v-for="item in menuItem">
                 <v-list-subheader v-if="item.type === 'subheader'">{{ item.title }}</v-list-subheader>
@@ -21,7 +21,8 @@
                     class="text-left"
                     color="success"
                     rounded="xl"
-                    @click="goDetail(item)">
+                    @click="goDetail(item)"
+                >
                     <v-list-item-title v-text="item.title"/>
                 </v-list-item>
             </v-list>
@@ -32,10 +33,12 @@
 import {computed, onMounted} from "vue";
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
-import router from "@/router/index.js";
+import {useRouter} from "vue-router";
 
 const editorStore = useEditorStore()
 const { scnList } = storeToRefs(editorStore)
+
+const router = useRouter()
 
 const menuItem = computed(() => {
     let result = []
@@ -49,7 +52,7 @@ const menuItem = computed(() => {
                 title: node.scn_name,
                 seqno: node.scn_seqno,
                 type: item.type,
-                url: `/editor/viewer/${node.scn_seqno}/${item.type}`
+                url: `/viewer/${node.scn_seqno}/${item.type}`
             })
         })
 
@@ -58,6 +61,10 @@ const menuItem = computed(() => {
 
     return result
 })
+
+const goEditor = () => {
+    router.push('/editor')
+}
 
 const goDetail = (item) => {
     editorStore.getScnInfo({

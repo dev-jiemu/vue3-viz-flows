@@ -1,5 +1,5 @@
 <template>
-    <main-header/>
+    <main-header :mode="mode"/>
 
     <main-left-menu/>
 
@@ -10,5 +10,7 @@
 <script setup>
 import {RouterView} from 'vue-router'
 import MainHeader from "@/components/common/header.vue";
-import MainLeftMenu from "@/components/common/left_menu.vue"
+import MainLeftMenu from "@/components/viewers/viewer_left_menu.vue"
+
+const mode = 'viewer'
 </script>

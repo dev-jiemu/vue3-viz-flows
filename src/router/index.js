@@ -1,8 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Main from '@/views/main.vue'
+import Viewer from '@/views/viewer.vue'
+import Editor from '@/views/editor.vue'
 import DemoVueFlow from '@/components/demos/vue_flow.vue'
+import NodeInformation from '@/components/viewers/node_information.vue'
+import NodeViewer from '@/components/viewers/node_viewer.vue'
+import NodeEditor from '@/components/editors/node_editor.vue'
 import EditorInformation from '@/components/editors/editor_information.vue'
-import EditorViewer from '@/components/editors/editor_viewer.vue'
+import NewScenario from '@/components/editors/new_scenario.vue'
 import DevDrawing from '@/components/dev/drawing.vue'
 
 const router = createRouter({
@@ -11,12 +15,29 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            redirect: '/editor'
+            redirect: '/viewer',
+        },
+        {
+            path: '/viewer',
+            name: 'viewer_main',
+            component: Viewer,
+            children: [
+                {
+                    path: '',
+                    name: 'node_information',
+                    component: NodeInformation,
+                },
+                {
+                    path: ':seqno/:type',
+                    name: 'node_viewer',
+                    component: NodeViewer,
+                }
+            ]
         },
         {
             path: '/editor',
-            name: 'editor_main',
-            component: Main,
+            name: 'editor',
+            component: Editor,
             children: [
                 {
                     path: '',
@@ -24,19 +45,16 @@ const router = createRouter({
                     component: EditorInformation,
                 },
                 {
-                    path: 'viewer/:seqno/:type',
-                    name: 'editor_viewer',
-                    component: EditorViewer,
+                    path: ':seqno/:type',
+                    name: 'node_editor',
+                    component: NodeEditor,
+                },
+                {
+                    path: 'new',
+                    name: 'new_scenario',
+                    component: NewScenario,
                 }
             ]
-        },
-        {
-            path: '/change',
-            name: 'change'
-        },
-        {
-            path: '/new',
-            name: 'new',
         },
         {
             path: '/demo',
@@ -46,7 +64,7 @@ const router = createRouter({
         {
             path: '/dev/drawing', // TODO: 컴포넌트 연습용 개발 페이지 - 나중에 제거요망
             name: 'dev',
-            component: Main,
+            component: Viewer,
             children: [
                 {
                     path: '',

@@ -44,7 +44,7 @@
 import '@vue-flow/core/dist/style.css';
 import {Handle, Position} from "@vue-flow/core";
 import {computed, ref} from "vue";
-import PropTooltip from '@/components/editors/props/tooltip.vue'
+import PropTooltip from '@/components/viewers/props/tooltip.vue'
 
 const props = defineProps({
     id: String,

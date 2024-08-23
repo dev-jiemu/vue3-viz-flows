@@ -36,10 +36,10 @@ import {MiniMap} from "@vue-flow/minimap"
 import {Controls} from '@vue-flow/controls'
 
 import DropzoneBackground from "@/components/common/dropzone_background.vue"
-import NodeInit from "@/components/editors/custom_nodes/node_init.vue"
-import NodeStep from "@/components/editors/custom_nodes/node_step.vue"
-import NodeEnd from "@/components/editors/custom_nodes/node_end.vue"
-import PopupStepActionInfo from '@/components/editors/props/popup_step_action_info.vue'
+import NodeInit from "@/components/viewers/custom_nodes/node_init.vue"
+import NodeStep from "@/components/viewers/custom_nodes/node_step.vue"
+import NodeEnd from "@/components/viewers/custom_nodes/node_end.vue"
+import PopupStepActionInfo from '@/components/viewers/props/popup_step_action_info.vue'
 
 import {useEditorStore} from "@/stores/editor.js"
 import {storeToRefs} from "pinia"
