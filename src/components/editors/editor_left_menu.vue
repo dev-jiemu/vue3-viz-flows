@@ -9,6 +9,7 @@
                     :color="item.color"
                     rounded="shaped"
                     :prepend-icon="item.icon"
+                    @click="goRouter(item.url)"
                 >
                     {{ item.text }}
                 </v-btn>
@@ -34,7 +35,7 @@
 </template>
 <script setup>
 import {useRouter} from "vue-router";
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
 
@@ -84,4 +85,9 @@ const goDetail = (item) => {
     })
     router.push(item.url)
 }
+
+onMounted(() => {
+    console.log('editors.left_menu()')
+    editorStore.getScnList()
+})
 </script>

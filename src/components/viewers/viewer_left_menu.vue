@@ -75,7 +75,7 @@ const goDetail = (item) => {
 }
 
 onMounted(() => {
-    console.log('common.left_menu()')
+    console.log('viewers.left_menu()')
     editorStore.getScnList()
 })
 </script>
