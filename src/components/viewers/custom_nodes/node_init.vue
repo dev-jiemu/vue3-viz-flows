@@ -6,12 +6,12 @@
                     <v-col cols="1" class="text-center mr-1">
                         <v-icon class="mb-1 ml-2" icon="mdi-play-circle-outline" size="x-small"/>
                     </v-col>
-                    <v-col class="text-left ml-1">{{ props.data.stepId }}</v-col>
+                    <v-col class="text-left ml-1">{{ props.data.step_id }}</v-col>
                 </v-row>
             </div>
             <v-divider class="mt-1"/>
             <div class="ma-1" ref="stepWrapper">
-                <template v-for="(item, idx) in props.data.stepAction">
+                <template v-for="(item, idx) in props.data.step_action">
                     <div class="pa-2">
                         <v-row>
                             <v-col cols="9" class="text-left mt-2">
@@ -58,7 +58,7 @@ const emits = defineEmits(['open-detail'])
 const stepWrapper = ref(null)
 
 const sourcePosition = computed(() => {
-    const length = props.data.stepAction.length
+    const length = props.data.step_action.length
     const spacing = totalHeight.value / length
 
     const positions = []

@@ -55,7 +55,7 @@ export const useEditorStore = defineStore('editor', () => {
                     nodeDetail.step_list.forEach((item) => {
                         result.push(item)
                     })
-                    scnInfo.value.stepList = result
+                    scnInfo.value.step_list = result
                 }
             }
         }, (err) => {
@@ -92,8 +92,8 @@ export const useEditorStore = defineStore('editor', () => {
         }
 
         action.data = {
-            stepId: item.step_id,
-            stepAction: actionArray
+            step_id: item.step_id,
+            step_action: actionArray
         }
 
         return action
@@ -103,8 +103,8 @@ export const useEditorStore = defineStore('editor', () => {
         let result = []
 
         positionX = 100 // TODO: position setting
-        if (scnInfo.value.stepList !== undefined && scnInfo.value.stepList.length > 0) {
-            scnInfo.value.stepList.forEach((item) => {
+        if (scnInfo.value.step_list !== undefined && scnInfo.value.step_list.length > 0) {
+            scnInfo.value.step_list.forEach((item) => {
                 let obj = extractActions(item)
                 result.push(obj)
             })
@@ -133,12 +133,12 @@ export const useEditorStore = defineStore('editor', () => {
             scnNodes.value.forEach(item => {
                 if (item.id !== 'END') {
                     // TODO: edge line color setting : step
-                    item.data.stepAction.forEach(obj => {
+                    item.data.step_action.forEach(obj => {
                         // stepAction id : source -> next_step_id : target
                         if (obj.hasOwnProperty("id") && obj.hasOwnProperty("next_step_id")) {
                             let edge = {
                                 id: `edge-${idx++}`,
-                                source: item.data.stepId,
+                                source: item.data.step_id,
                                 sourceHandle: obj.id, // 사실 같은값임...ㅇㅂㅇ...
                                 target: obj.next_step_id,
                                 targetHandle: obj.next_step_id,

@@ -5,19 +5,19 @@
                 <v-row>
                     <v-col cols="1" class="text-center">
                         <Handle
-                            :id="props.data.stepId"
+                            :id="props.data.step_id"
                             type="target"
                             :position="Position.Left"
                             class="handle-target"
                             style="top: 20px;"/>
                         <v-icon class="mb-1 ml-2" icon="mdi-playlist-play" size="x-small"/>
                     </v-col>
-                    <v-col class="text-left ml-3">{{ props.data.stepId }}</v-col>
+                    <v-col class="text-left ml-3">{{ props.data.step_id }}</v-col>
                 </v-row>
             </div>
             <v-divider class="mt-1"/>
             <div class="ma-1" ref="stepWrapper">
-                <template v-for="(item, idx) in props.data.stepAction">
+                <template v-for="(item, idx) in props.data.step_action">
                     <div class="pa-2">
                         <v-row>
                             <v-col cols="9" class="text-left mt-2">
@@ -68,7 +68,7 @@ const openPopup = (item) => {
 const stepWrapper = ref(null)
 
 const sourcePosition = computed(() => {
-    const length = props.data.stepAction.length
+    const length = props.data.step_action.length
     const spacing = totalHeight.value / length
 
     const positions = []
