@@ -19,33 +19,43 @@
             </v-btn>
         </v-col>
     </v-row>
-    <v-divider class="ma-5"/>
+    <v-divider class="mt-5 mb-5"/>
     <v-card class="ma-3" v-for="info in editScnInfo.step_list">
         <v-card-text class="ma-1">
             <v-row>
                 <v-col cols="6">
-                    <div class="text-h6 text-left mb-2">
-                        <v-chip
-                            class="mr-1 mb-1"
-                            label
-                            color="purple"
-                        >{{ info.step_order }}
-                        </v-chip>
-                        {{ info.step_id }}
-                    </div>
-                    <template v-for="action in info.event_actions">
+                    <v-row>
+                        <v-col cols="8" class="text-left">
+                            <span class="text-h6 mb-2">
+                                <v-chip
+                                    class="ml-3 mr-1 mb-1 font-weight-bold"
+                                    label
+                                    color="purple"
+                                >{{ info.step_order }}
+                                </v-chip>
+                                {{ info.step_id }}
+                            </span>
+                        </v-col>
+                        <v-col class="text-right">
+                            <v-btn class="mt-2 mr-3" icon="mdi-plus" variant="text" density="compact"
+                                   color="success"></v-btn>
+                        </v-col>
+                    </v-row>
+                    <template v-for="(action, action_idx) in info.event_actions">
                         <v-card class="ma-3 position-relative" variant="outlined">
                             <v-btn
                                 class="position-absolute top-0 right-0"
                                 style="transform: translate(-30%, 30%);"
                                 variant="text"
                                 density="compact"
-                                icon="mdi-pencil"></v-btn>
+                                icon="mdi-pencil"
+                                @click="openActionPopup(info.step_order, action_idx, action)"
+                            ></v-btn>
                             <v-card-text>
                                 <template v-for="(value, key) in action">
                                     <v-row>
-                                        <v-col cols="4" class="text-right">{{ key }}</v-col>
-                                        <v-col class="text-left">{{ value }}</v-col>
+                                        <v-col cols="4" class="text-right font-weight-bold">{{ key }}</v-col>
+                                        <v-col cols="7" class="text-left">{{ value }}</v-col>
                                     </v-row>
                                 </template>
                             </v-card-text>
@@ -53,10 +63,10 @@
                     </template>
                 </v-col>
                 <v-col cols="6" class="text-left">
-                    <span class="text-h6">Preview</span>
+                    <span class="text-h6">+ Preview</span>
                     <vue-json-pretty
                         :data="info"
-                        style="background-color: aliceblue;"
+                        style="background-color: aliceblue; padding: 10px;"
                         class="ma-2"
                         showLine
                         showIcon
@@ -65,14 +75,14 @@
             </v-row>
         </v-card-text>
     </v-card>
-    <v-dialog v-model="editModel" max-width="600">
-        <!-- TODO: -->
+    <v-dialog v-model="editModel" max-width="650">
+        <popup-step-action-edit :item="editAction" @close="closeActionPopup" @update="updateScnInfo"/>
     </v-dialog>
 </template>
 <script setup>
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
-
+import PopupStepActionEdit from '@/components/editors/props/popup_step_action_edit.vue'
 import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useEditorStore} from "@/stores/editor.js";
@@ -119,15 +129,31 @@ const editScnInfo = computed({
     }
 })
 
+// step_list => event_actions
 const editModel = ref(false)
+const editAction = ref({
+    order_id: '',
+    action_id: '',
+    action: {}
+})
+
+const openActionPopup = (orderId, actionId, action) => {
+    editAction.value.order_id = orderId
+    editAction.value.action_id = actionId
+    editAction.value.action = Object.assign(action, {})
+
+    editModel.value = true
+}
+
+const closeActionPopup = () => {
+    editModel.value = false
+}
 
 const route = useRoute()
 
 // TODO: json object to string
-const updateScnInfo = () => {
-    if (confirm('update?')) {
-
-    }
+const updateScnInfo = (update) => {
+    alert(`updateScnInfo : ${JSON.stringify(update)}`)
 }
 
 onMounted(() => {
