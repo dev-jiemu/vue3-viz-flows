@@ -12,7 +12,7 @@
         </v-card-title>
         <v-card-text class="ma-1">
             <template v-for="(value, key) in editAction.action">
-                <div v-if="typeof value === 'object'">
+                <div v-if="typeof props.item.action[key] === 'object'">
                     <v-card class="pa-2">
                         <v-row>
                             <v-col cols="4" class="font-weight-bold text-right">
@@ -24,11 +24,15 @@
                                 </span>하면 편집이 가능합니다.
                             </v-col>
                         </v-row>
-                        <!-- TODO: json-editor -->
-                        <vue-json-pretty
-                            :data="editAction.action[key]"
-                            editable
-                        ></vue-json-pretty>
+                        <json-editor-vue
+                            class="ma-2"
+                            v-model="editAction.action[key]"
+                            :mode="'text'"
+                            :askToFormat="true"
+                            :mainMenuBar="false"
+                            :statusBar="true"
+                            :stringified="false"
+                        ></json-editor-vue>
                     </v-card>
                 </div>
                 <div v-else>
@@ -52,22 +56,24 @@
                     <v-btn color="gray" variant="outlined" @click="closePopup">CLOSE</v-btn>
                 </v-col>
                 <v-col cols="6" class="text-right">
-                    <v-btn color="success" variant="outlined" @click="updateAction">OK</v-btn>
+                    <v-btn
+                        color="success"
+                        variant="outlined"
+                        @click="updateAction">OK</v-btn>
                 </v-col>
             </v-row>
         </v-card-text>
     </v-card>
 </template>
 <script setup>
-import VueJsonPretty from 'vue-json-pretty'
-import 'vue-json-pretty/lib/styles.css'
+import JsonEditorVue from 'json-editor-vue'
 
 import {onMounted, ref} from "vue";
 
 const props = defineProps(['item'])
 const emits = defineEmits(['close', 'update'])
 
-const editAction = ref(props.item)
+const editAction = ref(JSON.parse(JSON.stringify(props.item))) // json object 변형 방지를 위한 깊은복사
 
 const closePopup = () => {
     emits('close')
@@ -75,12 +81,19 @@ const closePopup = () => {
 
 const updateAction = () => {
     if (confirm('update?')) {
+        for (let key in editAction.value.action) {
+            if (editAction.value.action[key] === undefined) {
+                alert(`올바르지 않은 데이터 형식이 있습니다. (${key})`)
+                return
+            }
+        }
+
         emits('update', editAction.value)
     }
 }
 
 onMounted(() => {
-    console.log(`openActionPopup : ${props.item.order_id}, ${props.item.action_id}, [${JSON.stringify(props.item.action)}]`)
+    console.log(`openActionPopup : ${props.item.info_idx}, ${props.item.action_id}, [${JSON.stringify(props.item.action)}]`)
 })
 
 </script>

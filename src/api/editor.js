@@ -28,5 +28,18 @@ export default {
                 fcb(err)
             }
         })
+    },
+    updateScnDetail(param, scb, fcb) {
+        let reqUrl = '/editor/' + param.node_detail.seqno + '/' + param.node_detail.type
+
+        commonApi.PUT(reqUrl, param, (data) => {
+            if (scb) {
+                scb(data)
+            }
+        }, (err) => {
+            if(fcb) {
+                fcb(err)
+            }
+        })
     }
 }

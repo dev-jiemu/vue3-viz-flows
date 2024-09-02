@@ -50,13 +50,29 @@ export const useEditorStore = defineStore('editor', () => {
                 scnInfo.value.type = nodeDetail.type
                 scnInfo.value.seqno = nodeDetail.seqno
 
+                let result = []
                 if (nodeDetail.step_list && nodeDetail.step_list.length > 0) {
-                    let result = []
                     nodeDetail.step_list.forEach((item) => {
-                        result.push(item)
+                        let step = {}
+
+                        step.scn_seqno = item.scn_seqno
+                        step.step_id = item.step_id
+                        step.step_order = item.step_order
+
+                        let actions
+
+                        try {
+                            actions = JSON.parse(item.event_actions)
+                        } catch (e) {
+                            actions = item.event_actions
+                        }
+
+                        step.event_actions = actions
+                        result.push(step)
                     })
-                    scnInfo.value.step_list = result
                 }
+
+                scnInfo.value.step_list = result
             }
         }, (err) => {
             console.error('editor.getScnInfo ERROR : ', err)
@@ -66,7 +82,7 @@ export const useEditorStore = defineStore('editor', () => {
     const extractActions = (item) => {
         let action = {}
 
-        let actionArray = JSON.parse(item.event_actions)
+        let actionArray = item.event_actions
 
         // node type setting
         // init(INIT), step

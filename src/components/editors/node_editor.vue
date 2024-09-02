@@ -11,6 +11,12 @@
             <v-btn
                 class="mr-3"
                 variant="outlined"
+                color="success"
+                prepend-icon="mdi-plus"
+            >NEW STEP</v-btn>
+            <v-btn
+                class="mr-3"
+                variant="outlined"
                 color="orange"
                 prepend-icon="mdi-update"
                 @click="updateScnInfo"
@@ -20,7 +26,7 @@
         </v-col>
     </v-row>
     <v-divider class="mt-5 mb-5"/>
-    <v-card class="ma-3" v-for="info in editScnInfo.step_list">
+    <v-card v-if="editScnInfo.step_list !== undefined && editScnInfo.step_list.length > 0" class="ma-3" v-for="(info, info_idx) in editScnInfo.step_list">
         <v-card-text class="ma-1">
             <v-row>
                 <v-col cols="6">
@@ -49,7 +55,7 @@
                                 variant="text"
                                 density="compact"
                                 icon="mdi-pencil"
-                                @click="openActionPopup(info.step_order, action_idx, action)"
+                                @click="openActionPopup(info_idx, action_idx, action)"
                             ></v-btn>
                             <v-card-text>
                                 <template v-for="(value, key) in action">
@@ -75,15 +81,22 @@
             </v-row>
         </v-card-text>
     </v-card>
+    <v-card v-else>
+        <v-card-text class="font-weight-bold">
+            * step_list is empty *
+        </v-card-text>
+    </v-card>
     <v-dialog v-model="editModel" max-width="650">
-        <popup-step-action-edit :item="editAction" @close="closeActionPopup" @update="updateScnInfo"/>
+        <popup-step-action-edit :item="editAction" @close="closeActionPopup" @update="updateEventAction"/>
     </v-dialog>
 </template>
 <script setup>
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
+import editorApi from '@/api/editor.js'
+
 import PopupStepActionEdit from '@/components/editors/props/popup_step_action_edit.vue'
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import {useEditorStore} from "@/stores/editor.js";
 import {storeToRefs} from "pinia";
@@ -91,54 +104,19 @@ import {storeToRefs} from "pinia";
 const editorStore = useEditorStore()
 const {scnInfo} = storeToRefs(editorStore)
 
-const editScnInfo = computed({
-    get() {
-        let result = {}
-
-        result.type = scnInfo.value.type
-        result.seqno = scnInfo.value.seqno
-
-        if (scnInfo.value.hasOwnProperty("step_list")) {
-            let stepList = []
-            scnInfo.value.step_list.forEach(item => {
-                let step = {}
-
-                step.scn_seqno = item.scn_seqno
-                step.step_id = item.step_id
-                step.step_order = item.step_order
-
-                let actions
-
-                try {
-                    actions = JSON.parse(item.event_actions)
-                } catch (e) {
-                    actions = item.event_actions
-                }
-
-                step.event_actions = actions
-
-                stepList.push(step)
-            })
-
-            result.step_list = stepList
-        }
-
-        return result
-    },
-    set(newValue) {
-    }
-})
+// TODO: scn_seqno order by?
+const editScnInfo = ref(scnInfo.value)
 
 // step_list => event_actions
 const editModel = ref(false)
 const editAction = ref({
-    order_id: '',
+    info_idx: '',
     action_id: '',
     action: {}
 })
 
-const openActionPopup = (orderId, actionId, action) => {
-    editAction.value.order_id = orderId
+const openActionPopup = (infoIdx, actionId, action) => {
+    editAction.value.info_idx = infoIdx
     editAction.value.action_id = actionId
     editAction.value.action = Object.assign(action, {})
 
@@ -146,14 +124,42 @@ const openActionPopup = (orderId, actionId, action) => {
 }
 
 const closeActionPopup = () => {
+    editAction.value.info_idx = ''
+    editAction.value.action_id = ''
+    editAction.value.action = {}
+
     editModel.value = false
 }
 
 const route = useRoute()
 
-// TODO: json object to string
-const updateScnInfo = (update) => {
-    alert(`updateScnInfo : ${JSON.stringify(update)}`)
+const updateScnInfo = () => {
+    if (confirm('update information?')) {
+        let update_obj = JSON.parse(JSON.stringify(editScnInfo.value))
+
+        update_obj.step_list.forEach((item) => {
+            item.event_actions = JSON.stringify(item.event_actions)
+        })
+
+        let param = {
+            node_detail: update_obj
+        }
+
+        editorApi.updateScnDetail(param, () => {
+            alert('수정이 완료되었습니다')
+            editorStore.getScnInfo({
+                seqno: update_obj.seqno,
+                type: update_obj.type
+            })
+        }, (err) => {
+            alert("오류가 발생했습니다 : " + err)
+        })
+    }
+}
+
+const updateEventAction = (update) => {
+    editScnInfo.value.step_list[update.info_idx].event_actions[update.action_id] = Object.assign(update.action, {})
+    closeActionPopup()
 }
 
 onMounted(() => {
@@ -163,9 +169,14 @@ onMounted(() => {
     if (nodeType !== "" && nodeSeqno !== "") {
         console.log('editor - onMounted : request scn_info')
         editorStore.getScnInfo({
-            seqno: nodeSeqno,
-            type: nodeType
+            seqno: route.params.seqno,
+            type: route.params.type
         })
     }
+})
+
+watch(() => scnInfo.value, (newValue) => {
+    editScnInfo.value = newValue
+    window.scrollTo(0, 0) // 스크롤 최상단으로 올림
 })
 </script>
