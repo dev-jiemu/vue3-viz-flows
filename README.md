@@ -20,4 +20,4 @@
 ## 🛠️ Skills
 
 - Vue.js 3 (vue-flow, vuetify 3, pinia)
-- Java Spring or Node.js (둘다 고려중...ㅇㅂㅇ..)
+- ~~Java Spring or~~ <strong>Node.js🙌</strong>

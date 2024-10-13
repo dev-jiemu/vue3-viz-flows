@@ -1,6 +1,6 @@
 {
-  "name": "vue3-flow",
-  "version": "0.0.0",
+  "name": "vue3-flow-front",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
