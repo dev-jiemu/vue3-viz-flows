@@ -21,3 +21,8 @@
 
 - Vue.js 3 (vue-flow, vuetify 3, pinia)
 - ~~Java Spring or~~ <strong>Node.js🙌</strong>
+
+
+## 🖌️ Wireframe
+- 시간날때마다 짬짬히 그려놓기
+- https://www.figma.com/design/QOvpww8pzpIqS8VNtWFBCy/Figma-basics?node-id=601-9&node-type=canvas&t=OAXTtDjdOMEAtOOM-0
