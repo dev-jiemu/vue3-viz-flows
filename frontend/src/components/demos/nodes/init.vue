@@ -24,7 +24,7 @@
         <handle type="source" :position="Position.Right" class="handle right-handle"/>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { Handle, Position } from '@vue-flow/core'
 
 import {onMounted} from "vue";
