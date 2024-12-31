@@ -1,0 +1,7 @@
+http:
+  port: 8082
+
+mongo:
+  name: mongo
+  password: test
+  database: flow-editor

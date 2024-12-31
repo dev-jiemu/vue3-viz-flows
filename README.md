@@ -20,7 +20,8 @@
 ## 🛠️ Skills
 
 - Vue.js 3 (vue-flow, vuetify 3, pinia)
-- ~~Java Spring or~~ <strong>Node.js🙌</strong>
+- ~~Java Spring or~~ <strong>Nest.js🙌</strong>
+- mongoDB
 
 
 ## 🖌️ Wireframe
